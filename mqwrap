@@ -1,0 +1,31 @@
+ Moving non-persistant AMQ setup to initscript wrapper.
+
+
++#!/bin/bash
++
++mq_setup() {
++    echo -n "Setting up activemq... "
++    local mq_local_dir=/usr/local/activemq
++    local mq_cluster=/cluster/mq
++    local mq_init=/etc/init.d/activemq
++    local mq_pid_dir=/var/run/activemq
++
++    if [[ ! -d $mq_cluster ]]; then mkdir -p $mq_cluster; fi
++    if [[ ! -d $mq_pid_dir ]]; then mkdir -p $mq_pid_dir; fi
++    if [[ ! -d $mq_local_dir ]]; then mkdir -p $mq_local_dir; fi
++
++    chown -R activemq:activemq $mq_cluster
++    chown -R activemq:activemq $mq_local_dir
++    chown -R activemq:activemq $mq_pid_dir
++    chmod 755 $mq_cluster
++
++    echo "exited: $?"
++}
++
++mq_setup
++/usr/local/activemq/bin/activemq $1
+
+
+
+
+
